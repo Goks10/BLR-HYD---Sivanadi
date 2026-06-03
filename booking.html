@@ -229,7 +229,12 @@
           <label for="clientName">Your Full Name</label>
           <input type="text" id="clientName" class="form-control" placeholder="Enter your full name" required>
         </div>
-        
+
+        <div class="form-group">
+          <label for="clientPhone">WhatsApp / Phone Number</label>
+          <input type="tel" id="clientPhone" class="form-control" placeholder="e.g. +91 98765 43210" required>
+        </div>
+
         <div class="form-group">
           <label for="clientLanguage">Preferred Language for Reading</label>
           <select id="clientLanguage" class="form-control" required>
@@ -330,22 +335,28 @@
     });
 
     // ⬇ Paste your Google Apps Script Web App URL here
-    const SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwcmTpfxU5fNQxpTcZR7TpZVLuqdhP8l7hawRc0bEUSYdu8M48G54KXaNsOiF-G854/exec';
+    const SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbzT4jbI6ebyrnag9bTi7-ZxsnBQ-jVZk404wAApzd9f5uK3QC7IEI-xwCmdImDkWlg/exec';
 
     document.getElementById('multiPageBookingForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
-      const bookingData = {
-        name:     document.getElementById('clientName').value,
+      var selectedGender = document.querySelector('input[name="clientGender"]:checked');
+      if (!selectedGender) {
+        alert('Please select your gender to continue.');
+        return;
+      }
+
+      var bookingData = {
+        name:     document.getElementById('clientName').value.trim(),
+        phone:    document.getElementById('clientPhone').value.trim(),
         language: document.getElementById('clientLanguage').value,
-        gender:   document.querySelector('input[name="clientGender"]:checked').value,
+        gender:   selectedGender.value,
         date:     document.getElementById('clientDate').value,
-        message:  document.getElementById('clientMessage').value
+        message:  document.getElementById('clientMessage').value.trim()
       };
 
       localStorage.setItem('nadiBookingData', JSON.stringify(bookingData));
 
-      // Send to Google Sheet
       if (SHEET_WEBHOOK_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL') {
         fetch(SHEET_WEBHOOK_URL, {
           method: 'POST',
