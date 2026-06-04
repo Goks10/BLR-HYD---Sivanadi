@@ -22,13 +22,13 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', 'YOUR_PIXEL_ID'); // Replace YOUR_PIXEL_ID with your actual Meta Pixel ID
+    fbq('init', '1500233205487392');
     fbq('track', 'PageView');
     fbq('track', 'InitiateCheckout'); // Fired instantly on checkout/form entry
   </script>
   <noscript>
     <img height="1" width="1" style="display:none" 
-         src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1"/>
+         src="https://www.facebook.com/tr?id=1500233205487392&ev=PageView&noscript=1"/>
   </noscript>
   
   <style>
@@ -243,6 +243,7 @@
             <option value="Hindi">Hindi</option>
             <option value="Tamil">Tamil</option>
             <option value="Telugu">Telugu</option>
+            <option value="Kannada">Kannada</option>
           </select>
         </div>
 
@@ -281,6 +282,37 @@
           <textarea id="clientMessage" class="form-control" rows="3" placeholder="e.g., career growth, marriage delays..."></textarea>
         </div>
         
+
+        <div class="form-group">
+          <label style="font-weight: 600; margin-bottom: 10px; display: block;">What made you interested in Nadi Astrology? <span style="color:#c0392b;">*</span></label>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <label style="display: flex; align-items: center; gap: 10px; font-weight: 400; cursor: pointer;">
+              <input type="checkbox" name="interest" value="Curiosity" style="width: 18px; height: 18px; cursor: pointer;"> Curiosity
+            </label>
+            <label style="display: flex; align-items: center; gap: 10px; font-weight: 400; cursor: pointer;">
+              <input type="checkbox" name="interest" value="Life Confusion" style="width: 18px; height: 18px; cursor: pointer;"> Life Confusion
+            </label>
+            <label style="display: flex; align-items: center; gap: 10px; font-weight: 400; cursor: pointer;">
+              <input type="checkbox" name="interest" value="Recommendation" style="width: 18px; height: 18px; cursor: pointer;"> Recommendation
+            </label>
+            <label style="display: flex; align-items: center; gap: 10px; font-weight: 400; cursor: pointer;">
+              <input type="checkbox" name="interest" value="Spiritual interest" style="width: 18px; height: 18px; cursor: pointer;"> Spiritual interest
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label style="font-weight: 600; margin-bottom: 10px; display: block;">Have you watched the Nadi Astrology Explanation video Fully? <span style="color:#c0392b;">*</span></label>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <label style="display: flex; align-items: center; gap: 10px; font-weight: 400; cursor: pointer;">
+              <input type="radio" name="watchedVideo" value="Yes" style="width: 18px; height: 18px; cursor: pointer;" required> Yes
+            </label>
+            <label style="display: flex; align-items: center; gap: 10px; font-weight: 400; cursor: pointer;">
+              <input type="radio" name="watchedVideo" value="No" style="width: 18px; height: 18px; cursor: pointer;"> No
+            </label>
+          </div>
+        </div>
+
         <button type="submit" class="btn-primary" style="width: 100%; border-radius: 8px; font-size: 1.1rem; padding: 14px; display: inline-flex; justify-content: center; align-items: center; cursor: pointer;">
           Proceed to Confirmation →
         </button>
@@ -335,7 +367,7 @@
     });
 
     // ⬇ Paste your Google Apps Script Web App URL here
-    const SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbzT4jbI6ebyrnag9bTi7-ZxsnBQ-jVZk404wAApzd9f5uK3QC7IEI-xwCmdImDkWlg/exec';
+    const SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwZbdApNfO2sWE6rDGJaS8qUopbKEbuiQ6wr4iwm45IOLVCCpV222BAEsGT905a-Q/exec';
 
     document.getElementById('multiPageBookingForm').addEventListener('submit', function(e) {
       e.preventDefault();
@@ -346,13 +378,27 @@
         return;
       }
 
+      var selectedInterests = Array.from(document.querySelectorAll('input[name="interest"]:checked')).map(function(cb) { return cb.value; });
+      if (selectedInterests.length === 0) {
+        alert('Please select at least one reason for your interest in Nadi Astrology.');
+        return;
+      }
+
+      var selectedVideo = document.querySelector('input[name="watchedVideo"]:checked');
+      if (!selectedVideo) {
+        alert('Please indicate whether you have watched the Nadi Astrology Explanation video.');
+        return;
+      }
+
       var bookingData = {
         name:     document.getElementById('clientName').value.trim(),
         phone:    document.getElementById('clientPhone').value.trim(),
         language: document.getElementById('clientLanguage').value,
         gender:   selectedGender.value,
         date:     document.getElementById('clientDate').value,
-        message:  document.getElementById('clientMessage').value.trim()
+        message:    document.getElementById('clientMessage').value.trim(),
+        interest:   selectedInterests.join(', '),
+        watchedVideo: selectedVideo.value
       };
 
       localStorage.setItem('nadiBookingData', JSON.stringify(bookingData));
