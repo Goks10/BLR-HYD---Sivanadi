@@ -1332,5 +1332,19 @@
       }
     });
   </script>
+
+  <!-- Meta Pixel: InitiateCheckout on CTA click -->
+  <script>
+    (function() {
+      var _initiateCheckoutFiredThisClick = false;
+      document.querySelectorAll('.open-booking-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          if (_initiateCheckoutFiredThisClick) return;
+          _initiateCheckoutFiredThisClick = true;
+          fbq('track', 'InitiateCheckout');
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

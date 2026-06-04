@@ -24,7 +24,6 @@
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1500233205487392');
     fbq('track', 'PageView');
-    fbq('track', 'InitiateCheckout'); // Fired instantly on checkout/form entry
   </script>
   <noscript>
     <img height="1" width="1" style="display:none" 
@@ -277,10 +276,7 @@
           <input type="date" id="clientDate" class="form-control" required>
         </div>
 
-        <div class="form-group" style="margin-bottom: 24px;">
-          <label for="clientMessage">Main Life Question (Optional)</label>
-          <textarea id="clientMessage" class="form-control" rows="3" placeholder="e.g., career growth, marriage delays..."></textarea>
-        </div>
+
         
 
         <div class="form-group">
@@ -369,6 +365,7 @@
     // ⬇ Paste your Google Apps Script Web App URL here
     const SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwZbdApNfO2sWE6rDGJaS8qUopbKEbuiQ6wr4iwm45IOLVCCpV222BAEsGT905a-Q/exec';
 
+    var _addToCartFired = false;
     document.getElementById('multiPageBookingForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
@@ -396,7 +393,6 @@
         language: document.getElementById('clientLanguage').value,
         gender:   selectedGender.value,
         date:     document.getElementById('clientDate').value,
-        message:    document.getElementById('clientMessage').value.trim(),
         interest:   selectedInterests.join(', '),
         watchedVideo: selectedVideo.value
       };
@@ -412,6 +408,7 @@
         }).catch(function(err) { console.error('Sheet error:', err); });
       }
 
+      if (!_addToCartFired) { _addToCartFired = true; fbq('track', 'AddToCart'); }
       window.location.href = 'thankyou.html';
     });
   </script>
