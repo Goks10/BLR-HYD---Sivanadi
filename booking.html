@@ -235,6 +235,11 @@
         </div>
 
         <div class="form-group">
+          <label for="clientAge">Your Age</label>
+          <input type="number" id="clientAge" class="form-control" placeholder="e.g. 35" min="1" max="120" required>
+        </div>
+
+        <div class="form-group">
           <label for="clientLanguage">Preferred Language for Reading</label>
           <select id="clientLanguage" class="form-control" required>
             <option value="">-- Select Language --</option>
@@ -363,7 +368,7 @@
     });
 
     // ⬇ Paste your Google Apps Script Web App URL here
-    const SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwZbdApNfO2sWE6rDGJaS8qUopbKEbuiQ6wr4iwm45IOLVCCpV222BAEsGT905a-Q/exec';
+    const SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbz00hQSVmQ-1ficDdRgmHHRW3JSFIhrfrZXafwVb2ForWkTVa-y5__VoRLys32jAtM/exec';
 
     var _addToCartFired = false;
     document.getElementById('multiPageBookingForm').addEventListener('submit', function(e) {
@@ -390,6 +395,7 @@
       var bookingData = {
         name:     document.getElementById('clientName').value.trim(),
         phone:    document.getElementById('clientPhone').value.trim(),
+        age:      document.getElementById('clientAge').value.trim(),
         language: document.getElementById('clientLanguage').value,
         gender:   selectedGender.value,
         date:     document.getElementById('clientDate').value,
